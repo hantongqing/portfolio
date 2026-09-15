@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品集 </title>
+<meta name="description" content="AI Agent 产品设计 · 多智能体系统 · 智能体工程实践">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<meta property="og:type" content="website">
+<meta property="og:title" content="作品集 ✨">
+<meta property="og:description" content="AI Agent 产品设计 · 多智能体系统 · 智能体工程实践">
+<meta property="og:url" content="https://yourname.github.io/portfolio/">
+<style>
+  :root {
+    --glass: rgba(255,255,255,.10);
+    --glass-strong: rgba(255,255,255,.16);
+    --stroke: rgba(255,255,255,.22);
+    --text: #f4faff;
+    --text-soft: #c3dcff;
+    --blue: #3b9dff;
+    --indigo: #5f6dff;
+    --cyan: #7ee8fa;
+    --radius: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    min-height: 100vh;
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, "Segoe UI", sans-serif;
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #0f2b52, #1c4d8f, #2b7ec9, #1a5aa0, #0f2b52);
+    background-size: 400% 400%;
+    animation: sky 22s ease infinite;
+  }
+  body.night {
+    background: linear-gradient(-45deg, #030a1c, #081638, #0d2050, #051027, #030a1c);
+    background-size: 400% 400%;
+    animation: sky 22s ease infinite;
+    --text: #eef4ff;
+    --text-soft: #b0c8ff;
+  }
+  @keyframes sky { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+  /*  星星 */
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .star {
+    position: absolute; width: 3px; height: 3px; background: #fff; border-radius: 50%;
+    box-shadow: 0 0 6px 1px #fff; animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle { 0%,100%{opacity:.2; transform:scale(.6)} 50%{opacity:1; transform:scale(1.3)} }
+
+  /*  蓝色光粒 */
+  .sakura { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .petal {
+    position: absolute; top: -8vh; width: 8px; height: 8px;
+    background: radial-gradient(circle at 30% 30%, #d6ecff, #4da3ff);
+    border-radius: 50%; opacity: .7;
+    box-shadow: 0 0 8px 2px rgba(93,178,255,.55);
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: .9; }
+    100% { transform: translateY(115vh) translateX(120px) rotate(540deg); opacity: .5; }
+  }
+
+  /*  光球 */
+  .orb {
+    position: fixed; top: 8%; right: 9%; width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #cfe8ff);
+    box-shadow: 0 0 60px 20px rgba(150,200,255,.55); z-index: 0; animation: float 8s ease-in-out infinite;
+  }
+  body.night .orb { background: radial-gradient(circle at 35% 35%, #fff, #cfe0ff); box-shadow: 0 0 60px 20px rgba(180,200,255,.6); }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+
+  /* ===== 顶部导航 ===== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px); background: var(--glass);
+    border-bottom: 1px solid var(--stroke);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-weight: 800; font-size: 18px; text-shadow: 0 0 12px rgba(59,157,255,.8); letter-spacing: .06em; }
+  .toggle {
+    background: var(--glass-strong); border: 1px solid var(--stroke); color: var(--text);
+    width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 16px;
+    display: grid; place-items: center; transition: .25s;
+  }
+  .toggle:hover { transform: rotate(20deg) scale(1.1); box-shadow: 0 0 18px var(--indigo); }
+
+  /* ===== 首屏 ===== */
+  .hero { padding: 100px 0 70px; text-align: center; }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.1; margin-bottom: 16px;
+    text-shadow: 0 4px 40px rgba(0,0,0,.3);
+  }
+  .grad {
+    background: linear-gradient(90deg, #fff, var(--cyan), var(--blue), #fff);
+    background-size: 200% auto; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; animation: shine 4s linear infinite;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+  .hero .subtitle { font-size: 20px; color: var(--text-soft); letter-spacing: .06em; }
+
+  /* ===== 项目板块 ===== */
+  section { padding: 40px 0 70px; }
+  .section-header { text-align: center; margin-bottom: 50px; }
+  .badge {
+    display: inline-block; padding: 5px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    letter-spacing: .14em; background: var(--glass-strong); border: 1px solid var(--stroke);
+    text-shadow: 0 0 10px var(--blue); margin-bottom: 12px;
+  }
+  .section-title { font-size: 34px; font-weight: 900; text-shadow: 0 2px 20px rgba(0,0,0,.2); }
+
+  /* ✨ 磨砂玻璃卡片 */
+  .glass {
+    background: var(--glass); backdrop-filter: blur(16px);
+    border: 1px solid var(--stroke); border-radius: var(--radius);
+    box-shadow: 0 8px 40px rgba(8,35,80,.3);
+  }
+
+  /* ===== 项目全宽卡片 ===== */
+  .project-card {
+    padding: 44px 48px;
+    margin-bottom: 36px;
+    transition: .35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--blue), var(--indigo), var(--cyan));
+    box-shadow: 0 0 20px rgba(59,157,255,.6);
+    border-radius: 4px 0 0 4px;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .project-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(95,109,255,.4); border-color: rgba(126,232,250,.5); }
+  .project-card:hover::before { opacity: 1; }
+  .project-card:last-child { margin-bottom: 0; }
+
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+  .project-emoji { font-size: 44px; filter: drop-shadow(0 0 14px rgba(255,255,255,.5)); }
+  .project-meta { text-align: right; }
+  .project-role { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--cyan); opacity: .9; }
+  .project-date { font-size: 12px; opacity: .6; margin-top: 2px; }
+
+  .project-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: -.01em; }
+
+  .project-bg {
+    font-size: 15px; color: var(--text-soft); opacity: .85;
+    padding: 14px 20px; border-radius: 14px;
+    background: rgba(255,255,255,.06); border-left: 3px solid var(--indigo);
+    margin-bottom: 24px; line-height: 1.7;
+  }
+
+  .project-highlights { display: grid; gap: 14px; margin-bottom: 28px; }
+  .highlight {
+    padding: 16px 22px; border-radius: 14px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10);
+    transition: .2s;
+  }
+  .highlight:hover { background: rgba(255,255,255,.08); border-color: rgba(126,232,250,.3); }
+  .highlight-title { font-size: 14px; font-weight: 800; color: var(--cyan); margin-bottom: 6px; letter-spacing: .04em; }
+  .highlight-text { font-size: 14.5px; color: var(--text-soft); line-height: 1.75; }
+
+  /* 核心指标条 */
+  .metrics { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+  .metric {
+    flex: 1; min-width: 120px;
+    padding: 18px 16px; border-radius: 16px; text-align: center;
+    background: linear-gradient(135deg, rgba(59,157,255,.15), rgba(95,109,255,.12));
+    border: 1px solid rgba(255,255,255,.14);
+    transition: .25s;
+  }
+  .metric:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(59,157,255,.3); }
+  .metric-value { font-size: 30px; font-weight: 900; color: #fff; text-shadow: 0 0 16px rgba(59,157,255,.7); line-height: 1; }
+  .metric-label { font-size: 12px; color: var(--text-soft); margin-top: 6px; font-weight: 600; letter-spacing: .04em; }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag {
+    font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 999px;
+    background: rgba(59,157,255,.2); border: 1px solid rgba(255,255,255,.18);
+    color: var(--text-soft); letter-spacing: .02em; transition: .2s;
+  }
+  .tag:hover { background: rgba(59,157,255,.35); border-color: var(--cyan); transform: scale(1.05); }
+
+  /* GitHub 链接 */
+  .github-link-box { margin-bottom: 18px; min-height: 28px; }
+  .github-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; letter-spacing: .04em;
+    color: var(--cyan); background: rgba(126,232,250,.12);
+    border: 1px solid rgba(126,232,250,.3); border-radius: 10px;
+    padding: 6px 14px; transition: .25s; text-decoration: none;
+  }
+  .github-link:hover { background: rgba(126,232,250,.25); border-color: var(--cyan); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(126,232,250,.3); }
+  .github-link svg { width: 16px; height: 16px; fill: currentColor; }
+  .github-link-pending { font-size: 12px; color: var(--text-soft); opacity: .5; font-style: italic; }
+
+  /* 仓库卡片网格 */
+  .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .repo-card {
+    background: var(--glass); backdrop-filter: blur(14px);
+    border: 1px solid var(--stroke); border-radius: 18px;
+    padding: 24px 22px; transition: .3s;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .repo-card:hover { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(59,157,255,.25); border-color: rgba(126,232,250,.4); }
+  .repo-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .repo-name { font-size: 17px; font-weight: 800; color: #fff; word-break: break-word; }
+  .repo-lang { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(59,157,255,.2); border: 1px solid rgba(255,255,255,.15); color: var(--text-soft); white-space: nowrap; }
+  .repo-desc { font-size: 13.5px; color: var(--text-soft); line-height: 1.65; flex: 1; }
+  .repo-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+  .repo-stars { font-size: 12px; color: var(--text-soft); opacity: .7; }
+  .repo-link { font-size: 12px; font-weight: 700; color: var(--cyan); text-decoration: none; transition: .2s; }
+  .repo-link:hover { color: #fff; text-shadow: 0 0 8px var(--cyan); }
+
+  /* ===== 滚动淡入 ===== */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== 返回顶部 ===== */
+  .to-top {
+    position: fixed; right: 24px; bottom: 24px; z-index: 60;
+    width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--stroke); color: var(--text); font-size: 20px;
+    background: linear-gradient(90deg, var(--blue), var(--indigo));
+    box-shadow: 0 6px 22px rgba(95,109,255,.6);
+    display: grid; place-items: center;
+    opacity: 0; visibility: hidden; transform: translateY(20px) scale(.8);
+    transition: .3s;
+  }
+  .to-top.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+  .to-top:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 10px 30px rgba(59,157,255,.8); }
+
+  /* ===== 手机 ===== */
+  @media (max-width: 680px) {
+    .hero { padding: 60px 0 40px; }
+    .hero h1 { font-size: 38px; }
+    .project-card { padding: 28px 22px; }
+    .project-title { font-size: 22px; }
+    .project-header { flex-direction: column; }
+    .project-meta { text-align: left; }
+    .metrics { gap: 10px; }
+    .metric { min-width: 90px; padding: 14px 10px; }
+    .metric-value { font-size: 24px; }
+    .to-top { right: 14px; bottom: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; }
+    .sakura, .stars { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="orb"></div>
+  <div class="stars" id="stars"></div>
+  <div class="sakura" id="sakura"></div>
+
+  <!-- 顶部导航 -->
+  <header>
+    <div class="container nav">
+      <div class="logo">作品集</div>
+      <button class="toggle" id="toggle" title="切换白天/夜晚"></button>
+    </div>
+  </header>
+
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="container">
+      <h1><span class="grad">我的项目</span> ✨</h1>
+      <p class="subtitle">AI Agent 产品设计 · 多智能体系统 · 智能体工程实践</p>
+    </div>
+  </section>
+
+  <!-- 项目列表 -->
+  <section id="projects">
+    <div class="container">
+
+      <!-- 项目 1: AIGC 多智能体短剧生成系统 -->
+      <div class="glass project-card reveal" data-repo="aigc,短剧,metagpt,agent,video,short-drama">
+        <div class="project-header">
+          <div class="project-emoji">🎬</div>
+          <div class="project-meta">
+            <div class="project-role">独立负责人</div>
+            <div class="project-date">2026.03 - 2026.05</div>
+          </div>
+        </div>
+        <h2 class="project-title">AIGC 多智能体短剧生成系统</h2>
+        <div class="github-link-box"></div>
+        <div class="project-bg">解决短视频内容生产中剧本拆解、分镜设计、多模态素材生成高度依赖人工的问题，通过多 Agent 协作实现从文本剧本到完整视频的端到端自动化生产。</div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-value">8</div>
+            <div class="metric-label">Agent 协作</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">4</div>
+            <div class="metric-label">层生成管线</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">34s</div>
+            <div class="metric-label">端到端生成</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">100%</div>
+            <div class="metric-label">启动成功率</div>
+          </div>
+        </div>
+
+        <div class="project-highlights">
+          <div class="highlight">
+            <div class="highlight-title">多智能体编排与多模态生成管线</div>
+            <div class="highlight-text">基于 MetaGPT 设计 8 Agent 协作架构，通过 Message Bus 与 CoT 实现剧本到分镜的结构化拆解。集成 VectorEngine 构建 LLM + Image + Video + TTS 四层生成管线，设计三级容灾回退（自动重试、模型降级、跨层隔离），单次运行完成 3 镜头、34 秒视频端到端自动生成。</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-title">视觉连贯性与工程鲁棒性</div>
+            <div class="highlight-text">设计链式帧传递机制与 Prompt Guard 规则引擎（身份/情绪/画面要素约束），消除角色漂移与视觉幻觉，seed 锁定保证镜头确定性。实现 50+ 依赖懒加载与指数退避重试，配合 FFmpeg 无损合成管线，连续帧传递与框架启动成功率均达 100%。</div>
+          </div>
+        </div>
+
+        <div class="project-tags">
+          <span class="tag">MetaGPT</span>
+          <span class="tag">Agent 编排</span>
+          <span class="tag">Message Bus</span>
+          <span class="tag">CoT</span>
+          <span class="tag">VectorEngine</span>
+          <span class="tag">LLM</span>
+          <span class="tag">FFmpeg</span>
+          <span class="tag">Prompt Guard</span>
+        </div>
+      </div>
+
+      <!-- 项目 2: Pico 本地代码智能体 Harness -->
+      <div class="glass project-card reveal" data-repo="pico,harness,agent,code,本地">
+        <div class="project-header">
+          <div class="project-emoji">🤖</div>
+          <div class="project-meta">
+            <div class="project-role">独立负责人</div>
+            <div class="project-date">2026.03 - 2026.05</div>
+          </div>
+        </div>
+        <h2 class="project-title">Pico: 本地代码智能体 Harness</h2>
+        <div class="github-link-box"></div>
+        <div class="project-bg">现有代码 Agent（如 Cursor、Claude Code）均为云端服务，存在代码泄露、上下文失控及工具误调用不可追溯等问题。面向本地开发场景，设计一款轻量、可审计的本地代码 Agent。</div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-value">4</div>
+            <div class="metric-label">类模型后端</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">21.8%</div>
+            <div class="metric-label">Prompt 压缩</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">99%</div>
+            <div class="metric-label">正确率</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">105</div>
+            <div class="metric-label">条自动化测试</div>
+          </div>
+        </div>
+
+        <div class="project-highlights">
+          <div class="highlight">
+            <div class="highlight-title">Agent Harness 架构设计</div>
+            <div class="highlight-text">统一模型接入、工具执行、会话状态与运行工作流盘流程，支持 4 类模型后端、7 类工具和 3 类运行工件，形成可回放的任务执行链路。</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-title">上下文与记忆管理</div>
+            <div class="highlight-text">设计分层压缩与结构化记忆系统，将 prompt 长度压缩 21.8%；通过 freshness 校验与记忆召回减少重复读取，重读文件次数从 8 次降至 3 次，正确率提升至 99%。</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-title">评测与审计闭环</div>
+            <div class="highlight-text">建立 benchmark 与审计体系，支持 pass_rate / trace 自动汇总与回归对比；覆盖 12 个标准化任务和 105 条自动化测试。</div>
+          </div>
+        </div>
+
+        <div class="project-tags">
+          <span class="tag">Agent Harness</span>
+          <span class="tag">记忆管理</span>
+          <span class="tag">Benchmark</span>
+          <span class="tag">审计闭环</span>
+          <span class="tag">Prompt Engineering</span>
+          <span class="tag">本地部署</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GitHub 项目（自动从 GitHub 拉取） -->
+  <section id="github-projects">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="badge">GITHUB</div>
+        <h2 class="section-title">更多项目</h2>
+      </div>
+      <div class="repo-grid" id="repoGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-soft);opacity:.6;">⏳ 正在从 GitHub 加载项目…</div>
+      </div>
+    </div>
+  </section>
+
+<!-- 返回顶部 -->
+<button class="to-top" id="toTop" title="回到顶部"></button>
+
+<script>
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = (i * 37 % 100) + '%';
+    s.style.top = (i * 53 % 100) + '%';
+    s.style.animationDelay = (i % 10) * 0.3 + 's';
+    s.style.opacity = 0.3 + (i % 5) * 0.14;
+    stars.appendChild(s);
+  }
+
+  const sakura = document.getElementById('sakura');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = (i * 5.5 % 100) + '%';
+    p.style.animationDuration = (7 + (i % 6)) + 's';
+    p.style.animationDelay = (i % 9) * 0.8 + 's';
+    const scale = 0.6 + (i % 5) * 0.18;
+    p.style.transform = 'scale(' + scale + ')';
+    sakura.appendChild(p);
+  }
+
+  const toggle = document.getElementById('toggle');
+  const saved = localStorage.getItem('sky');
+  if (saved === 'night') { document.body.classList.add('night'); toggle.textContent = '☀️'; }
+  else { toggle.textContent = '🌙'; }
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('night');
+    const isNight = document.body.classList.contains('night');
+    toggle.textContent = isNight ? '☀️' : '🌙';
+    localStorage.setItem('sky', isNight ? 'night' : 'day');
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => { toTop.classList.toggle('show', window.scrollY > window.innerHeight * 0.8); }, { passive: true });
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // GitHub 自动关联
+  const GITHUB_USER = 'truelove123645';
+  const githubIcon = '<svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+  const starIcon = '⭐';
+
+  async function linkGitHubRepos() {
+    const grid = document.getElementById('repoGrid');
+    try {
+      const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated`);
+      if (!res.ok) throw new Error('GitHub API error');
+      const repos = await res.json();
+
+      // 精选卡片关联
+      document.querySelectorAll('.project-card[data-repo]').forEach(card => {
+        const box = card.querySelector('.github-link-box');
+        const keywords = card.dataset.repo.split(',').map(k => k.toLowerCase().trim());
+        const title = card.querySelector('.project-title')?.textContent.toLowerCase() || '';
+        const matched = repos.filter(r => {
+          const name = (r.name || '').toLowerCase();
+          const desc = (r.description || '').toLowerCase();
+          return keywords.some(k => name.includes(k) || desc.includes(k)) || title.includes(name);
+        });
+        if (matched.length > 0) {
+          const best = matched[0];
+          box.innerHTML = `<a class="github-link" href="${best.html_url}" target="_blank" rel="noopener">${githubIcon} 查看源码 (${best.name})</a>`;
+        } else {
+          box.innerHTML = '<span class="github-link-pending">⏳ 源码待上传至 GitHub</span>';
+        }
+      });
+
+      // 渲染仓库网格
+      if (repos.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-soft);opacity:.6;">暂无公开仓库</div>';
+        return;
+      }
+      grid.innerHTML = repos.map(r => {
+        const desc = r.description || '暂无描述';
+        const lang = r.language || '';
+        const stars = r.stargazers_count || 0;
+        return `
+          <div class="repo-card">
+            <div class="repo-card-top">
+              <span class="repo-name">${r.name}</span>
+              ${lang ? `<span class="repo-lang">${lang}</span>` : ''}
+            </div>
+            <div class="repo-desc">${desc}</div>
+            <div class="repo-bottom">
+              <span class="repo-stars">${starIcon} ${stars}</span>
+              <a class="repo-link" href="${r.html_url}" target="_blank" rel="noopener">查看 →</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (e) {
+      document.querySelectorAll('.github-link-box').forEach(box => {
+        box.innerHTML = '<span class="github-link-pending">⏳ 源码待上传至 GitHub</span>';
+      });
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-soft);opacity:.6;">⚠️ GitHub 加载失败，请稍后刷新</div>';
+    }
+  }
+  linkGitHubRepos();
+</script>
+</body>
+</html>
