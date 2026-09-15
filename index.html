@@ -222,6 +222,7 @@
   .repo-desc { font-size: 13.5px; color: var(--text-soft); line-height: 1.65; flex: 1; }
   .repo-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
   .repo-stars { font-size: 12px; color: var(--text-soft); opacity: .7; }
+  .repo-date { font-size: 11px; color: var(--text-soft); opacity: .5; }
   .repo-link { font-size: 12px; font-weight: 700; color: var(--cyan); text-decoration: none; transition: .2s; }
   .repo-link:hover { color: #fff; text-shadow: 0 0 8px var(--cyan); }
 
@@ -506,6 +507,7 @@
         const desc = r.description || '暂无描述';
         const lang = r.language || '';
         const stars = r.stargazers_count || 0;
+        const date = r.created_at ? r.created_at.split('T')[0] : '';
         return `
           <div class="repo-card">
             <div class="repo-card-top">
@@ -515,6 +517,7 @@
             <div class="repo-desc">${desc}</div>
             <div class="repo-bottom">
               <span class="repo-stars">${starIcon} ${stars}</span>
+              ${date ? `<span class="repo-date">📅 ${date}</span>` : ''}
               <a class="repo-link" href="${r.html_url}" target="_blank" rel="noopener">查看 →</a>
             </div>
           </div>
