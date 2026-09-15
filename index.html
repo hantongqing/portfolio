@@ -124,10 +124,10 @@
     box-shadow: 0 8px 40px rgba(8,35,80,.3);
   }
 
-  /* ===== 项目全宽卡片 ===== */
+  /* ===== 项目卡片（一行两个） ===== */
+  .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 20px; }
   .project-card {
-    padding: 44px 48px;
-    margin-bottom: 36px;
+    padding: 28px 26px;
     transition: .35s;
     position: relative;
     overflow: hidden;
@@ -136,23 +136,23 @@
     content: "";
     position: absolute;
     top: 0; left: 0;
-    width: 5px;
+    width: 4px;
     height: 100%;
     background: linear-gradient(180deg, var(--blue), var(--indigo), var(--cyan));
-    box-shadow: 0 0 20px rgba(59,157,255,.6);
+    box-shadow: 0 0 16px rgba(59,157,255,.5);
     border-radius: 4px 0 0 4px;
     opacity: 0;
     transition: opacity .3s;
   }
-  .project-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(95,109,255,.4); border-color: rgba(126,232,250,.5); }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(95,109,255,.35); border-color: rgba(126,232,250,.4); }
   .project-card:hover::before { opacity: 1; }
   .project-card:last-child { margin-bottom: 0; }
 
-  .project-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
-  .project-emoji { font-size: 44px; filter: drop-shadow(0 0 14px rgba(255,255,255,.5)); }
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .project-emoji { font-size: 32px; filter: drop-shadow(0 0 10px rgba(255,255,255,.5)); }
   .project-meta { text-align: right; }
-  .project-role { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--cyan); opacity: .9; }
-  .project-date { font-size: 12px; opacity: .6; margin-top: 2px; }
+  .project-role { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--cyan); opacity: .9; }
+  .project-date { font-size: 11px; opacity: .6; margin-top: 2px; }
 
   .project-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: -.01em; }
 
@@ -291,6 +291,8 @@
   <section id="projects">
     <div class="container">
 
+      <div class="project-grid">
+
       <!-- 项目 1: AIGC 多智能体短剧生成系统 -->
       <div class="glass project-card reveal">
         <div class="project-header">
@@ -400,6 +402,8 @@
           <span class="tag">本地部署</span>
         </div>
       </div>
+
+      </div><!-- /project-grid -->
 
     </div>
   </section>
