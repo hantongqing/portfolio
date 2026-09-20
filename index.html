@@ -292,12 +292,25 @@
   }
   .screenshot-item img {
     width: 100%; height: auto; display: block;
-    transition: .3s;
+    transition: .3s; cursor: pointer;
   }
   .screenshot-item:hover img { transform: scale(1.02); }
   .screenshot-caption {
     padding: 12px 16px; font-size: 13px; color: var(--text-soft);
     text-align: center; background: rgba(0,0,0,.4);
+  }
+
+  /*  图片放大弹窗 */
+  .image-zoom-modal {
+    display: none; position: fixed; inset: 0; z-index: 110;
+    background: rgba(0,0,0,.95); backdrop-filter: blur(12px);
+    justify-content: center; align-items: center; padding: 40px;
+    cursor: zoom-out;
+  }
+  .image-zoom-modal.active { display: flex; }
+  .image-zoom-modal img {
+    max-width: 95vw; max-height: 95vh; object-fit: contain;
+    border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,.5);
   }
 
   /* ===== 手机 ===== */
@@ -485,10 +498,15 @@
 <!-- 截图弹窗 -->
 <div class="screenshot-modal" id="screenshotModal">
   <div class="screenshot-modal-content">
-    <button class="screenshot-modal-close" onclick="closeScreenshotModal()"></button>
+    <button class="screenshot-modal-close" onclick="closeScreenshotModal()">×</button>
     <h3 class="screenshot-modal-title" id="screenshotModalTitle">使用截图</h3>
     <div class="screenshot-grid" id="screenshotGrid"></div>
   </div>
+</div>
+
+<!-- 图片放大弹窗 -->
+<div class="image-zoom-modal" id="imageZoomModal" onclick="closeImageZoom()">
+  <img src="" alt="放大预览" id="zoomedImage">
 </div>
 
 <script>
@@ -560,7 +578,7 @@
 
     grid.innerHTML = data.map(s => `
       <div class="screenshot-item">
-        <img src="${s.src}" alt="${s.caption}" loading="lazy">
+        <img src="${s.src}" alt="${s.caption}" loading="lazy" onclick="openImageZoom('${s.src}')">
         <div class="screenshot-caption">${s.caption}</div>
       </div>
     `).join('');
@@ -573,6 +591,18 @@
     const modal = document.getElementById('screenshotModal');
     modal.classList.remove('active');
     document.body.style.overflow = '';
+  }
+
+  function openImageZoom(src) {
+    const modal = document.getElementById('imageZoomModal');
+    const img = document.getElementById('zoomedImage');
+    img.src = src;
+    modal.classList.add('active');
+  }
+
+  function closeImageZoom() {
+    const modal = document.getElementById('imageZoomModal');
+    modal.classList.remove('active');
   }
 
   // 点击背景关闭
