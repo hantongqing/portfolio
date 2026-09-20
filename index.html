@@ -252,6 +252,8 @@
     color: var(--cyan); background: rgba(126,232,250,.12);
     border: 1px solid rgba(126,232,250,.3); cursor: pointer;
     transition: .25s;
+    position: relative;
+    z-index: 2;
   }
   .view-screenshots-btn:hover {
     background: rgba(126,232,250,.25); border-color: var(--cyan);
@@ -456,7 +458,7 @@
           <span class="tag">本地部署</span>
         </div>
 
-        <button class="view-screenshots-btn" onclick="openScreenshotModal('pico')">📸 查看使用截图</button>
+        <button class="view-screenshots-btn" onclick="openScreenshotModal('pico')">📸 Demo 截图</button>
       </div>
 
       </div><!-- /project-grid -->
