@@ -395,12 +395,12 @@
 
         <div class="project-highlights">
           <div class="highlight">
-            <div class="highlight-title">多智能体编排与多模态生成管线</div>
-            <div class="highlight-text">基于 MetaGPT 设计 8 Agent 协作架构，通过 Message Bus 与 CoT 实现剧本到分镜的结构化拆解。集成 VectorEngine 构建 LLM + Image + Video + TTS 四层生成管线，设计三级容灾回退（自动重试、模型降级、跨层隔离），单次运行完成 3 镜头、34 秒视频端到端自动生成。</div>
+            <div class="highlight-title">多智能体架构设计</div>
+            <div class="highlight-text">基于 MetaGPT 设计 8 Agent 协作架构，通过 Message Bus 与 CoT 实现剧本到分镜的结构化拆解，集成 VectorEngine 构建 LLM+Image+Video+TTS 四层生成管线。</div>
           </div>
           <div class="highlight">
-            <div class="highlight-title">视觉连贯性与工程鲁棒性</div>
-            <div class="highlight-text">设计链式帧传递机制与 Prompt Guard 规则引擎（身份/情绪/画面要素约束），消除角色漂移与视觉幻觉，seed 锁定保证镜头确定性。实现 50+ 依赖懒加载与指数退避重试，配合 FFmpeg 无损合成管线，连续帧传递与框架启动成功率均达 100%。</div>
+            <div class="highlight-title">工程实现与优化</div>
+            <div class="highlight-text">设计链式帧传递与 Prompt Guard 规则引擎消除角色漂移，实现 50+ 依赖懒加载与指数退避重试，配合 FFmpeg 无损合成，单次运行完成 3 镜头、34 秒视频，启动成功率 100%。</div>
           </div>
         </div>
 
