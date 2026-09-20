@@ -287,6 +287,30 @@
   }
   .screenshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
   .screenshot-item {
+
+  /* 视频弹窗 */
+  .video-modal {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,.90); backdrop-filter: blur(8px);
+    justify-content: center; align-items: center; padding: 40px;
+  }
+  .video-modal.active { display: flex; }
+  .video-modal-content {
+    max-width: 900px; width: 100%;
+    position: relative;
+  }
+  .video-modal-close {
+    position: absolute; top: -50px; right: 0;
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--stroke); color: var(--text); font-size: 18px;
+    background: var(--glass-strong); display: grid; place-items: center;
+    transition: .2s; z-index: 101;
+  }
+  .video-modal-close:hover { background: rgba(255,255,255,.25); transform: rotate(90deg); }
+  .video-modal video {
+    width: 100%; border-radius: 12px;
+    border: 1px solid var(--stroke);
+  }
     border-radius: 12px; overflow: hidden;
     border: 1px solid var(--stroke); background: rgba(0,0,0,.3);
   }
@@ -414,6 +438,8 @@
           <span class="tag">FFmpeg</span>
           <span class="tag">Prompt Guard</span>
         </div>
+
+        <button class="view-screenshots-btn" onclick="openVideoModal('aigc')"> Demo 视频</button>
       </div>
 
       <!-- 项目 2: Pico 本地代码智能体 Harness -->
@@ -501,6 +527,16 @@
     <button class="screenshot-modal-close" onclick="closeScreenshotModal()">×</button>
     <h3 class="screenshot-modal-title" id="screenshotModalTitle">使用截图</h3>
     <div class="screenshot-grid" id="screenshotGrid"></div>
+  </div>
+</div>
+
+<!-- 视频弹窗 -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-content">
+    <button class="video-modal-close" onclick="closeVideoModal()">×</button>
+    <video controls autoplay>
+      <source src="" id="videoSource" type="video/mp4">
+    </video>
   </div>
 </div>
 
@@ -592,6 +628,38 @@
     modal.classList.remove('active');
     document.body.style.overflow = '';
   }
+
+  const videos = {
+    'aigc': { src: 'images/seedance2.0.mp4', title: 'AIGC 多智能体短剧生成系统 - 演示视频' }
+  };
+
+  function openVideoModal(project) {
+    const modal = document.getElementById('videoModal');
+    const video = modal.querySelector('video');
+    const source = document.getElementById('videoSource');
+    const data = videos[project];
+
+    if (data) {
+      source.src = data.src;
+      video.load();
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const video = modal.querySelector('video');
+    video.pause();
+    video.currentTime = 0;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // 点击视频弹窗背景关闭
+  document.getElementById('videoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVideoModal();
+  });
 
   function openImageZoom(src) {
     const modal = document.getElementById('imageZoomModal');
