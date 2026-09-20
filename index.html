@@ -44,7 +44,7 @@
   @keyframes sky { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
   a { color: inherit; text-decoration: none; }
-  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
 
   /*  星星 */
   .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -125,9 +125,9 @@
   }
 
   /* ===== 项目卡片（一行两个） ===== */
-  .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 20px; }
+  .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
   .project-card {
-    padding: 28px 26px;
+    padding: 20px 18px;
     transition: .35s;
     position: relative;
     overflow: hidden;
@@ -154,41 +154,41 @@
   .project-role { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--cyan); opacity: .9; }
   .project-date { font-size: 11px; opacity: .6; margin-top: 2px; }
 
-  .project-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: -.01em; }
+  .project-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; letter-spacing: -.01em; }
 
   .project-bg {
-    font-size: 15px; color: var(--text-soft); opacity: .85;
-    padding: 14px 20px; border-radius: 14px;
+    font-size: 13px; color: var(--text-soft); opacity: .85;
+    padding: 10px 14px; border-radius: 10px;
     background: rgba(255,255,255,.06); border-left: 3px solid var(--indigo);
-    margin-bottom: 24px; line-height: 1.7;
+    margin-bottom: 16px; line-height: 1.6;
   }
 
-  .project-highlights { display: grid; gap: 14px; margin-bottom: 28px; }
+  .project-highlights { display: grid; gap: 10px; margin-bottom: 18px; }
   .highlight {
     padding: 16px 22px; border-radius: 14px;
     background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10);
     transition: .2s;
   }
   .highlight:hover { background: rgba(255,255,255,.08); border-color: rgba(126,232,250,.3); }
-  .highlight-title { font-size: 14px; font-weight: 800; color: var(--cyan); margin-bottom: 6px; letter-spacing: .04em; }
-  .highlight-text { font-size: 14.5px; color: var(--text-soft); line-height: 1.75; }
+  .highlight-title { font-size: 12px; font-weight: 800; color: var(--cyan); margin-bottom: 4px; letter-spacing: .04em; }
+  .highlight-text { font-size: 12.5px; color: var(--text-soft); line-height: 1.6; }
 
   /* 核心指标条 */
-  .metrics { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+  .metrics { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
   .metric {
-    flex: 1; min-width: 120px;
-    padding: 18px 16px; border-radius: 16px; text-align: center;
+    flex: 1; min-width: 80px;
+    padding: 12px 10px; border-radius: 12px; text-align: center;
     background: linear-gradient(135deg, rgba(59,157,255,.15), rgba(95,109,255,.12));
     border: 1px solid rgba(255,255,255,.14);
     transition: .25s;
   }
   .metric:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(59,157,255,.3); }
-  .metric-value { font-size: 30px; font-weight: 900; color: #fff; text-shadow: 0 0 16px rgba(59,157,255,.7); line-height: 1; }
-  .metric-label { font-size: 12px; color: var(--text-soft); margin-top: 6px; font-weight: 600; letter-spacing: .04em; }
+  .metric-value { font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 16px rgba(59,157,255,.7); line-height: 1; }
+  .metric-label { font-size: 10px; color: var(--text-soft); margin-top: 4px; font-weight: 600; letter-spacing: .04em; }
 
-  .project-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .tag {
-    font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
     background: rgba(59,157,255,.2); border: 1px solid rgba(255,255,255,.18);
     color: var(--text-soft); letter-spacing: .02em; transition: .2s;
   }
@@ -208,7 +208,7 @@
   .github-link-pending { font-size: 12px; color: var(--text-soft); opacity: .5; font-style: italic; }
 
   /* 仓库卡片网格 */
-  .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .repo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
   .repo-card {
     background: var(--glass); backdrop-filter: blur(14px);
     border: 1px solid var(--stroke); border-radius: 18px;
