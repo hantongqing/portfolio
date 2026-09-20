@@ -244,6 +244,60 @@
   .to-top.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
   .to-top:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 10px 30px rgba(59,157,255,.8); }
 
+  /*  查看截图按钮 */
+  .view-screenshots-btn {
+    display: block; width: 100%; margin-top: 20px;
+    padding: 12px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 700; letter-spacing: .04em;
+    color: var(--cyan); background: rgba(126,232,250,.12);
+    border: 1px solid rgba(126,232,250,.3); cursor: pointer;
+    transition: .25s;
+  }
+  .view-screenshots-btn:hover {
+    background: rgba(126,232,250,.25); border-color: var(--cyan);
+    transform: translateY(-2px); box-shadow: 0 4px 16px rgba(126,232,250,.3);
+  }
+
+  /*  截图弹窗 */
+  .screenshot-modal {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,.85); backdrop-filter: blur(8px);
+    justify-content: center; align-items: center; padding: 40px;
+  }
+  .screenshot-modal.active { display: flex; }
+  .screenshot-modal-content {
+    max-width: 900px; width: 100%; max-height: 85vh;
+    background: var(--glass); backdrop-filter: blur(20px);
+    border: 1px solid var(--stroke); border-radius: 20px;
+    padding: 30px; overflow-y: auto; position: relative;
+  }
+  .screenshot-modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--stroke); color: var(--text); font-size: 18px;
+    background: var(--glass-strong); display: grid; place-items: center;
+    transition: .2s;
+  }
+  .screenshot-modal-close:hover { background: rgba(255,255,255,.25); transform: rotate(90deg); }
+  .screenshot-modal-title {
+    font-size: 20px; font-weight: 800; margin-bottom: 20px;
+    color: var(--cyan); text-align: center;
+  }
+  .screenshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .screenshot-item {
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--stroke); background: rgba(0,0,0,.3);
+  }
+  .screenshot-item img {
+    width: 100%; height: auto; display: block;
+    transition: .3s;
+  }
+  .screenshot-item:hover img { transform: scale(1.02); }
+  .screenshot-caption {
+    padding: 12px 16px; font-size: 13px; color: var(--text-soft);
+    text-align: center; background: rgba(0,0,0,.4);
+  }
+
   /* ===== 手机 ===== */
   @media (max-width: 680px) {
     .hero { padding: 60px 0 40px; }
@@ -401,6 +455,8 @@
           <span class="tag">Prompt Engineering</span>
           <span class="tag">本地部署</span>
         </div>
+
+        <button class="view-screenshots-btn" onclick="openScreenshotModal('pico')">📸 查看使用截图</button>
       </div>
 
       </div><!-- /project-grid -->
@@ -423,6 +479,15 @@
 
 <!-- 返回顶部 -->
 <button class="to-top" id="toTop" title="回到顶部">↑</button>
+
+<!-- 截图弹窗 -->
+<div class="screenshot-modal" id="screenshotModal">
+  <div class="screenshot-modal-content">
+    <button class="screenshot-modal-close" onclick="closeScreenshotModal()"></button>
+    <h3 class="screenshot-modal-title" id="screenshotModalTitle">使用截图</h3>
+    <div class="screenshot-grid" id="screenshotGrid"></div>
+  </div>
+</div>
 
 <script>
   const stars = document.getElementById('stars');
@@ -474,6 +539,44 @@
   const GITHUB_USER = 'hantongqing';
   const githubIcon = '<svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
   const starIcon = '⭐';
+
+  //  截图数据
+  const screenshots = {
+    'pico': [
+      { src: 'images/pico-demo-1.png', caption: 'Pico 启动界面' },
+      { src: 'images/pico-demo-2.png', caption: 'Pico 运行界面' }
+    ]
+  };
+
+  function openScreenshotModal(project) {
+    const modal = document.getElementById('screenshotModal');
+    const title = document.getElementById('screenshotModalTitle');
+    const grid = document.getElementById('screenshotGrid');
+
+    const data = screenshots[project] || [];
+    title.textContent = project === 'pico' ? 'Pico 使用截图' : '项目截图';
+
+    grid.innerHTML = data.map(s => `
+      <div class="screenshot-item">
+        <img src="${s.src}" alt="${s.caption}" loading="lazy">
+        <div class="screenshot-caption">${s.caption}</div>
+      </div>
+    `).join('');
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeScreenshotModal() {
+    const modal = document.getElementById('screenshotModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // 点击背景关闭
+  document.getElementById('screenshotModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeScreenshotModal();
+  });
 
   async function linkGitHubRepos() {
     const grid = document.getElementById('repoGrid');
