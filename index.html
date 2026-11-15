@@ -128,6 +128,21 @@
   .repo-link { font-size: 12px; font-weight: 700; color: var(--cyan); text-decoration: none; transition: .2s; }
   .repo-link:hover { color: #fff; text-shadow: 0 0 8px var(--cyan); }
 
+  .repo-pagination { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+  .repo-pagination[hidden], .repo-retry[hidden] { display: none; }
+  .page-button, .repo-retry {
+    padding: 10px 18px; border: 1px solid var(--stroke); border-radius: 10px;
+    background: var(--glass-strong); color: var(--text); font: inherit;
+    font-size: 14px; cursor: pointer; transition: .2s;
+  }
+  .page-button:hover:not(:disabled), .repo-retry:hover { border-color: var(--cyan); background: rgba(126,232,250,.2); }
+  .page-button:disabled { opacity: .4; cursor: default; }
+  .page-button:focus-visible, .repo-retry:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  .page-info { color: var(--text-soft); font-size: 14px; }
+  .repo-status { text-align: center; color: var(--text-soft); margin-top: 16px; font-size: 14px; }
+  .repo-retry { display: block; margin: 12px auto 0; }
+  #github-projects { scroll-margin-top: 76px; }
+
   /* ===== 返回顶部 ===== */
   .to-top {
     position: fixed; right: 24px; bottom: 24px; z-index: 60;
@@ -188,6 +203,13 @@
       <div class="repo-grid" id="repoGrid">
         <div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-soft);opacity:.6;">⏳ 正在从 GitHub 加载项目…</div>
       </div>
+      <nav class="repo-pagination" id="repoPagination" aria-label="项目分页" hidden>
+        <button class="page-button" id="previousPage" type="button" disabled>← 上一页</button>
+        <span class="page-info" id="pageInfo">第 1 页</span>
+        <button class="page-button" id="nextPage" type="button" disabled>下一页 →</button>
+      </nav>
+      <div class="repo-status" id="repoStatus" role="status" aria-live="polite" aria-atomic="true"></div>
+      <button class="repo-retry" id="repoRetry" type="button" hidden>重新加载</button>
     </div>
   </section>
 
@@ -235,44 +257,104 @@
 
   // 加载公开仓库
   const GITHUB_USER = 'hantongqing';
-  const starIcon = '⭐';
+  const REPOS_PER_PAGE = 50;
+  const grid = document.getElementById('repoGrid');
+  const pagination = document.getElementById('repoPagination');
+  const previousPage = document.getElementById('previousPage');
+  const nextPage = document.getElementById('nextPage');
+  const pageInfo = document.getElementById('pageInfo');
+  const repoStatus = document.getElementById('repoStatus');
+  const repoRetry = document.getElementById('repoRetry');
+  const repoPageCache = new Map();
+  let currentPage = 1;
+  let currentHasNext = false;
+  let isLoading = false;
+  let failedPage = 1;
 
-  async function loadGitHubRepos() {
-    const grid = document.getElementById('repoGrid');
+  function updatePagination() {
+    previousPage.disabled = isLoading || currentPage === 1;
+    nextPage.disabled = isLoading || !currentHasNext;
+  }
+
+  function renderRepoCards(repos) {
+    const cards = document.createDocumentFragment();
+    repos.forEach(repo => {
+      const card = document.createElement('div');
+      card.className = 'repo-card';
+      card.innerHTML = `
+        <div class="repo-card-top"><span class="repo-name"></span></div>
+        <div class="repo-desc"></div>
+        <div class="repo-bottom">
+          <span class="repo-stars"></span>
+          <a class="repo-link" target="_blank" rel="noopener">查看 →</a>
+        </div>`;
+      card.querySelector('.repo-name').textContent = repo.name;
+      card.querySelector('.repo-desc').textContent = repo.description || '暂无描述';
+      card.querySelector('.repo-stars').textContent = `⭐ ${repo.stargazers_count || 0}`;
+      card.querySelector('.repo-link').href = `https://github.com/${GITHUB_USER}/${encodeURIComponent(repo.name)}`;
+      if (repo.language) {
+        const language = document.createElement('span');
+        language.className = 'repo-lang';
+        language.textContent = repo.language;
+        card.querySelector('.repo-card-top').appendChild(language);
+      }
+      if (repo.created_at) {
+        const date = document.createElement('span');
+        date.className = 'repo-date';
+        date.textContent = `📅 ${repo.created_at.split('T')[0]}`;
+        card.querySelector('.repo-bottom').insertBefore(date, card.querySelector('.repo-link'));
+      }
+      cards.appendChild(card);
+    });
+    grid.replaceChildren(cards);
+  }
+
+  async function loadGitHubRepos(page = 1, scrollToProjects = false) {
+    if (isLoading || page < 1) return;
+    isLoading = true;
+    repoRetry.hidden = true;
+    repoStatus.textContent = `正在加载第 ${page} 页…`;
+    grid.setAttribute('aria-busy', 'true');
+    updatePagination();
     try {
-      const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=created&direction=desc`);
-      if (!res.ok) throw new Error('GitHub API error');
-      const repos = await res.json();
-
-      // 渲染仓库网格
+      let pageData = repoPageCache.get(page);
+      if (!pageData) {
+        const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=${REPOS_PER_PAGE}&page=${page}&sort=created&direction=desc`);
+        if (!res.ok) throw new Error('GitHub API error');
+        const repos = await res.json();
+        if (!Array.isArray(repos)) throw new Error('Invalid repository response');
+        // Link 响应头明确标记下一页；末页恰好有 50 个时也不会误判。
+        const hasNext = /<[^>]+>\s*;\s*rel="next"/.test(res.headers.get('Link') || '');
+        pageData = { repos, hasNext };
+        repoPageCache.set(page, pageData);
+      }
+      const { repos, hasNext } = pageData;
+      currentPage = page;
+      currentHasNext = hasNext;
+      pageInfo.textContent = `第 ${page} 页 · ${repos.length} 个项目`;
+      pagination.hidden = repos.length === 0 && page === 1;
       if (repos.length === 0) {
         grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-soft);opacity:.6;">暂无公开仓库</div>';
-        return;
+      } else {
+        renderRepoCards(repos);
       }
-      grid.innerHTML = repos.map(r => {
-        const desc = r.description || '暂无描述';
-        const lang = r.language || '';
-        const stars = r.stargazers_count || 0;
-        const date = r.created_at ? r.created_at.split('T')[0] : '';
-        return `
-          <div class="repo-card">
-            <div class="repo-card-top">
-              <span class="repo-name">${r.name}</span>
-              ${lang ? `<span class="repo-lang">${lang}</span>` : ''}
-            </div>
-            <div class="repo-desc">${desc}</div>
-            <div class="repo-bottom">
-              <span class="repo-stars">${starIcon} ${stars}</span>
-              ${date ? `<span class="repo-date">📅 ${date}</span>` : ''}
-              <a class="repo-link" href="${r.html_url}" target="_blank" rel="noopener">查看 →</a>
-            </div>
-          </div>
-        `;
-      }).join('');
+      repoStatus.textContent = repos.length ? `第 ${page} 页加载完成。${hasNext ? '可继续查看下一页。' : '已到最后一页。'}` : '';
+      if (scrollToProjects) document.getElementById('github-projects').scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-soft);opacity:.6;">⚠️ GitHub 加载失败，请稍后刷新</div>';
+      failedPage = page;
+      repoStatus.textContent = `第 ${page} 页加载失败，请重试。`;
+      repoRetry.hidden = false;
+      if (!repoPageCache.size) grid.replaceChildren();
+    } finally {
+      isLoading = false;
+      grid.setAttribute('aria-busy', 'false');
+      updatePagination();
     }
   }
+
+  previousPage.addEventListener('click', () => loadGitHubRepos(currentPage - 1, true));
+  nextPage.addEventListener('click', () => loadGitHubRepos(currentPage + 1, true));
+  repoRetry.addEventListener('click', () => loadGitHubRepos(failedPage, true));
   loadGitHubRepos();
 </script>
 </body>
